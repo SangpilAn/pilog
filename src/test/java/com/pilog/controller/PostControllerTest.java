@@ -44,7 +44,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청 시 타이틀이 빈값일 경우를 확인한다.")
+    @DisplayName("/posts 요청 시 타이틀이 null 값일 경우를 확인한다.")
     void errorNullTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
