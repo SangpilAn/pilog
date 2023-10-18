@@ -1,13 +1,11 @@
 package com.pilog.request;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
 @ToString
-@Setter
 @Getter
 public class PostCreate {
     @NotBlank(message = "타이틀을 입력해주세요.")
