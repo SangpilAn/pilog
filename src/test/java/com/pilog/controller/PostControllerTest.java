@@ -104,7 +104,7 @@ class PostControllerTest {
 
     @Test
     @DisplayName("/posts 요청 시 DB 에 값이 저장된다.")
-    void writeTest() throws Exception {
+    void dbWriteTest() throws Exception {
         //given
         PostCreate postCreate = PostCreate.builder()
                 .title("제목입니다.")
@@ -125,10 +125,29 @@ class PostControllerTest {
         Assertions.assertThat(1L).isEqualTo(postRepository.count());
 
         Post post = postRepository.findAll().get(0);
-        Assertions.assertThat("제목입니다.").isEqualTo(post.getTitle());
-        Assertions.assertThat("내용입니다.").isEqualTo(post.getContent());
+        Assertions.assertThat(post.getTitle()).isEqualTo("제목입니다.");
+        Assertions.assertThat(post.getContent()).isEqualTo("내용입니다.");
+    }
 
-        postRepository.deleteAll();
+    @Test
+    @DisplayName("/posts/{postId} GET 호출 시 해당 postId 게시글을 조회한다.")
+    void getTest() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("foo")
+                .content("bar")
+                .build();
+
+        postRepository.save(post);
+
+        // expect
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts/{postId}", post.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(post.getId()))
+                .andExpect(jsonPath("$.title").value("foo"))
+                .andExpect(jsonPath("$.content").value("bar"))
+                .andDo(MockMvcResultHandlers.print());
     }
 
 }
